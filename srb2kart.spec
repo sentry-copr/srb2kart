@@ -24,7 +24,7 @@ BuildRequires:  libpng libpng-devel
 BuildRequires:  zlib zlib-devel
 BuildRequires:  game-music-emu game-music-emu-devel
 BuildRequires:  libupnp libupnp-devel
-%if %{__isa_bits} == 64
+%if %{__isa_bits} == 32
 BuildRequires:  nasm
 %endif
 
