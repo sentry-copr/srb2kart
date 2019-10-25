@@ -18,10 +18,12 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  nasm
 BuildRequires:  mesa-libGLU-devel
-BuildRequires:  SDL2-devel
-BuildRequires:  SDL2_mixer-devel
-BuildRequires:  libpng
-BuildRequires:  zlib
+BuildRequires:  SDL2 SDL2-devel
+BuildRequires:  SDL2_mixer SDL2_mixer-devel
+BuildRequires:  libpng libpng-devel
+BuildRequires:  zlib zlib-devel
+BuildRequires:  game-music-emu game-music-emu-devel
+BuildRequires:  libupnp libupnp-devel
 %if %{__isa_bits} == 64
 BuildRequires:  nasm
 %endif
@@ -29,6 +31,8 @@ BuildRequires:  nasm
 Requires:       SDL2
 Requires:       SDL2_mixer
 Requires:       libpng
+Requires:       game-music-emu
+Requires:       libupnp
 Requires:       srb2kart-data >= 1.1
 
 
