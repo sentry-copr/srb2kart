@@ -18,6 +18,10 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  nasm
 BuildRequires:  mesa-libGLU-devel
+BuildRequires:  SDL2-devel
+BuildRequires:  SDL2_mixer-devel
+BuildRequires:  libpng
+BuildRequires:  zlib
 %if %{__isa_bits} == 64
 BuildRequires:  nasm
 %endif
