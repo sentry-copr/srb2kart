@@ -24,9 +24,7 @@ BuildRequires:  libpng-devel
 BuildRequires:  zlib-devel
 BuildRequires:  game-music-emu-devel
 BuildRequires:  libupnp-devel
-%ifarch i386
 BuildRequires:  nasm
-%endif
 
 Requires:       SDL2
 Requires:       SDL2_mixer
