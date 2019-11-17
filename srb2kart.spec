@@ -1,30 +1,30 @@
-
-%define _disable_source_fetch 0
+%global debug_package %{nil}
 
 Summary: A kart racing mod based on the 3D Sonic the Hedgehog fangame Sonic Robo Blast 2, based on a modified version of Doom Legacy.
 Name: srb2kart
 Version: 1.1
 %define LongVersion 11
 %define dataversion 1.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: Game
-Source:  https://github.com/STJr/Kart-Public/releases/download/v%{version}/srb2kart-v%{LongVersion}-patch.zip
-Source1: https://github.com/STJr/Kart-Public/archive/v%{version}.zip
-Source2: https://github.com/Jan200101/srb2kart-desktop/archive/master.zip
+#Source:  https://github.com/STJr/Kart-Public/releases/download/v%{version}/srb2kart-v%{LongVersion}-patch.zip
+Source: https://github.com/STJr/Kart-Public/archive/v%{version}.zip
+Source1: srb2kart.desktop
+Source2: srb2kart-opengl.desktop
+Source3: srb2kart-getcontent
 URL: https://mb.srb2.org/showthread.php?t=43708
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  nasm
 BuildRequires:  mesa-libGLU-devel
-BuildRequires:  SDL2 SDL2-devel
-BuildRequires:  SDL2_mixer SDL2_mixer-devel
-BuildRequires:  libpng libpng-devel
-BuildRequires:  zlib zlib-devel
-BuildRequires:  game-music-emu game-music-emu-devel
-BuildRequires:  libupnp libupnp-devel
-%if %{__isa_bits} == 32
+BuildRequires:  SDL2-devel
+BuildRequires:  SDL2_mixer-devel
+BuildRequires:  libpng-devel
+BuildRequires:  zlib-devel
+BuildRequires:  game-music-emu-devel
+BuildRequires:  libupnp-devel
+%ifarch i386
 BuildRequires:  nasm
 %endif
 
@@ -33,25 +33,20 @@ Requires:       SDL2_mixer
 Requires:       libpng
 Requires:       game-music-emu
 Requires:       libupnp
-Requires:       srb2kart-data >= 1.1
 
-
-%global debug_package %{nil}
+# Required to unpack the game files
+Requires:       bsdtar
+Requires:       unzip
 
 %description
 A kart racing mod based on the 3D Sonic the Hedgehog fangame Sonic Robo Blast 2, based on a modified version of Doom Legacy.
 
 
 %prep
-%setup -c -q
-%setup -c -q -a 1 -D -T
-%setup -c -q -a 2 -D -T
+%setup -q -c -n %{name}-%{version}
 
 %build
 cd Kart-Public-%{version}/src
-
-# clear out CPPFLAGS ( -D_FORTIFY_SOURCE doesn't like kart )
-CPPFLAGS=""
 
 [ "%{__isa_bits}" == "64" ] && IS64BIT="64" || IS64BIT=""
 # Don't compress with UPX
@@ -59,9 +54,8 @@ make NOUPX=1 LINUX$IS64BIT=1
 
 %install
 # icon + .desktop
-install -Dm644 srb2kart-desktop-master/srb2kart.desktop %{buildroot}/usr/share/applications/srb2kart.desktop
-install -m644  srb2kart-desktop-master/srb2kart-opengl.desktop %{buildroot}/usr/share/applications/srb2kart-opengl.desktop
-install -Dm644 patch.kart %{buildroot}/usr/share/games/SRB2Kart/patch.kart
+install -Dm644 %{SOURCE1} %{buildroot}/usr/share/applications/srb2kart.desktop
+install -m644  %{SOURCE2} %{buildroot}/usr/share/applications/srb2kart-opengl.desktop
 
 cd Kart-Public-%{version}
 [ "%{__isa_bits}" == "64" ] && IS64BIT="64" || IS64BIT=""
@@ -71,9 +65,11 @@ install -Dm755 bin/Linux$IS64BIT/Release/lsdl2srb2kart \
 install -Dm644 src/sdl/SDL_icon.xpm \
                %{buildroot}/usr/share/pixmaps/srb2kart.xpm
 
+install -m755 %{SOURCE3} %{buildroot}/usr/bin/srb2kart-getcontent
+
 %files
 /usr/bin/srb2kart
-/usr/share/games/SRB2Kart/patch.kart
+/usr/bin/srb2kart-getcontent
 /usr/share/pixmaps/srb2kart.xpm
 /usr/share/applications/srb2kart.desktop
 /usr/share/applications/srb2kart-opengl.desktop
