@@ -7,7 +7,7 @@ Version: 1.2
 %global dataVersion 1.2
 # the source code at the 1.2 tag is broken on gcc 10
 %global commit e229aabf229058e90c2a76552ef942be05ae71e5
-Release: 2%{?dist}
+Release: 1%{?dist}
 License: GPLv2
 Group: Game
 Source0: https://github.com/STJr/Kart-Public/archive/%{commit}.tar.gz#/%{name}-%{version}-%{commit}.tar.gz
@@ -25,6 +25,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  game-music-emu-devel
 BuildRequires:  libupnp-devel
 BuildRequires:  nasm
+BuildRequires:	libcurl-devel
 
 Requires:       SDL2
 Requires:       SDL2_mixer
