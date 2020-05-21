@@ -2,17 +2,17 @@
 
 Summary: A kart racing mod based on the 3D Sonic the Hedgehog fangame Sonic Robo Blast 2, based on a modified version of Doom Legacy.
 Name: srb2kart
-Version: 1.1
-%define LongVersion 11
-%define dataversion 1.1
+Version: 1.2
+%global longVersion 12
+%global dataVersion 1.2
+# the source code at the 1.2 tag is broken on gcc 10
+%global commit e229aabf229058e90c2a76552ef942be05ae71e5
 Release: 2%{?dist}
 License: GPLv2
 Group: Game
-#Source:  https://github.com/STJr/Kart-Public/releases/download/v%{version}/srb2kart-v%{LongVersion}-patch.zip
-Source: https://github.com/STJr/Kart-Public/archive/v%{version}.zip
+Source0: https://github.com/STJr/Kart-Public/archive/%{commit}.tar.gz#/%{name}-%{version}-%{commit}.tar.gz
 Source1: srb2kart.desktop
 Source2: srb2kart-opengl.desktop
-Source3: srb2kart-getcontent
 URL: https://mb.srb2.org/showthread.php?t=43708
 
 BuildRequires:  gcc
@@ -35,39 +35,58 @@ Requires:       libupnp
 # Required to unpack the game files
 Requires:       bsdtar
 Requires:       unzip
+Requires:       /usr/bin/install
 
 %description
 A kart racing mod based on the 3D Sonic the Hedgehog fangame Sonic Robo Blast 2, based on a modified version of Doom Legacy.
 
 
 %prep
-%setup -q -c -n %{name}-%{version}
+%autosetup -n Kart-Public-%{commit}
 
 %build
-cd Kart-Public-%{version}/src
+cd src
 
 [ "%{__isa_bits}" == "64" ] && IS64BIT="64" || IS64BIT=""
 # Don't compress with UPX
-make NOUPX=1 LINUX$IS64BIT=1
+%make_build NOUPX=1 LINUX$IS64BIT=1
 
 %install
 # icon + .desktop
-install -Dm644 %{SOURCE1} %{buildroot}/usr/share/applications/srb2kart.desktop
-install -m644  %{SOURCE2} %{buildroot}/usr/share/applications/srb2kart-opengl.desktop
+install -Dm644 %{SOURCE1} %{buildroot}%{_datadir}/applications/srb2kart.desktop
+install -m644  %{SOURCE2} %{buildroot}%{_datadir}/applications/srb2kart-opengl.desktop
 
-cd Kart-Public-%{version}
 [ "%{__isa_bits}" == "64" ] && IS64BIT="64" || IS64BIT=""
 
 install -Dm755 bin/Linux$IS64BIT/Release/lsdl2srb2kart \
                %{buildroot}/usr/bin/srb2kart
 install -Dm644 src/sdl/SDL_icon.xpm \
-               %{buildroot}/usr/share/pixmaps/srb2kart.xpm
+               %{buildroot}%{_datadir}/pixmaps/srb2kart.xpm
 
-install -m755 %{SOURCE3} %{buildroot}/usr/bin/srb2kart-getcontent
+mkdir -p %{buildroot}%{_prefix}/local/games/SRB2Kart
+
+%post
+TMP_DIR=$(mktemp -d)
+pushd $TMP_DIR
+
+wget -O Installer.exe https://github.com/STJr/Kart-Public/releases/download/v%{dataVersion}/srb2kart-v%{longVersion}-Installer.exe
+bsdtar xfv Installer.exe
+install -Dm644 {music,textures,gfx,maps,sounds,chars,bonuschars}.kart srb2.srb %{_prefix}/local/games/SRB2Kart
+
+wget -O patch.zip https://github.com/STJr/Kart-Public/releases/download/v%{dataVersion}/srb2kart-v%{longVersion}-patch.zip
+unzip patch.zip
+install -p -Dm664 patch.kart %{_prefix}/local/games/SRB2Kart
+
+popd
+
+rm -rf $TMP_DIR
+
+%postun
+rm -rf %{_prefix}/local/games/SRB2Kart
 
 %files
-/usr/bin/srb2kart
-/usr/bin/srb2kart-getcontent
-/usr/share/pixmaps/srb2kart.xpm
-/usr/share/applications/srb2kart.desktop
-/usr/share/applications/srb2kart-opengl.desktop
+%{_bindir}/srb2kart
+%{_datadir}/pixmaps/srb2kart.xpm
+%{_datadir}/applications/srb2kart.desktop
+%{_datadir}/applications/srb2kart-opengl.desktop
+%dir %{_prefix}/local/games/SRB2Kart
