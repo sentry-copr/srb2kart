@@ -36,7 +36,6 @@ Requires:       libupnp
 
 # Required to unpack the game files
 Requires:       bsdtar
-Requires:       unzip
 Requires:       /usr/bin/install
 
 %description
@@ -76,8 +75,8 @@ wget -O Installer.exe https://github.com/STJr/Kart-Public/releases/download/v%{d
 bsdtar xfv Installer.exe
 install -Dm644 {music,textures,gfx,maps,sounds,chars,bonuschars}.kart srb2.srb %{_prefix}/local/games/SRB2Kart
 
-wget -O patch.zip https://github.com/STJr/Kart-Public/releases/download/v%{dataVersion}/srb2kart-v%{longVersion}-patch.zip
-unzip patch.zip
+wget -O Patcher.exe https://github.com/STJr/Kart-Public/releases/download/v%{dataVersion}/srb2kart-v%{longVersion}-patcher.exe
+bsdtar xfv Patcher.exe
 install -p -Dm664 patch.kart %{_prefix}/local/games/SRB2Kart
 
 popd
