@@ -4,7 +4,7 @@ Summary:        A kart racing mod based on the 3D Sonic the Hedgehog fangame Son
 Name:           srb2kart
 Version:        1.3
 
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        GPLv2
 URL:            https://mb.srb2.org/showthread.php?t=43708
 Source0:        https://github.com/STJr/Kart-Public/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -65,6 +65,6 @@ install -Dm644 src/sdl/SDL_icon.xpm \
 %{_datadir}/applications/srb2kart-opengl.desktop
 
 %changelog
-* Tue Jun 08 2021 Jan Drögehoff <sentrycraft123@gmail.com> - 1.3-2
+* Tue Jun 08 2021 Jan Drögehoff <sentrycraft123@gmail.com> - 1.3-3
 - move to an lpf release model
 
