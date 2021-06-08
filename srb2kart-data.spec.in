@@ -1,0 +1,50 @@
+%global     debug_package %{nil}
+
+%global     repo_url https://github.com/STJr/Kart-Public
+
+Name:       srb2kart-data
+Summary:    A kart racing mod based on the 3D Sonic the Hedgehog fangame Sonic Robo Blast 2, based on a modified version of Doom Legacy.
+Version:    1.3
+%global     longVersion %(echo %{version} | sed 's/\\.//')
+
+Release:    1%{?dist}
+License:    non-redistributable
+URL:        https://mb.srb2.org/showthread.php?t=43708
+
+# THIS ORDER MUST STAY
+# Installer is larger than patcher which can result in network access being exausted
+# when we try downloading patcher which results in a failure
+Source0:    %{repo_url}/releases/download/v%{version}/srb2kart-v%{longVersion}-patcher.exe
+Source1:    %{repo_url}/releases/download/v%{version}/srb2kart-v%{longVersion}-Installer.exe
+
+
+BuildRequires:  bsdtar
+BuildRequires:  sed
+
+%description
+Bootstrap package allowing the lpf system to build the non-redistributable
+srb2kart-data package.
+
+%prep
+%setup -qcT
+
+bsdtar xfv %{SOURCE0}
+bsdtar xfv %{SOURCE1}
+
+# for some reason the mdls directory has unwritable folders
+chmod +w -R mdls
+
+%build
+
+%install
+mkdir -p %{buildroot}%{_prefix}/local/games/SRB2Kart
+
+install -p -Dm644 {music,textures,gfx,maps,sounds,chars,bonuschars}.kart srb2.srb %{buildroot}%{_prefix}/local/games/SRB2Kart
+install -p -Dm664 patch.kart %{buildroot}%{_prefix}/local/games/SRB2Kart
+
+%files
+%{_prefix}/local/games/SRB2Kart
+
+%changelog
+* Tue Jun 08 2021 Jan Drögehoff <sentrycraft123@gmail.com> - 1.3-1
+- initial lpf package
