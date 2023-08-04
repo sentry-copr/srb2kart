@@ -7,7 +7,7 @@ Release:        1%{?dist}
 License:        GPLv2
 URL:            https://mb.srb2.org/addons/srb2kart.2435/
 Source0:        https://github.com/STJr/Kart-Public/archive/v%{version}/%{name}-%{version}.tar.gz
-Source1:        https://github.com/STJr/Kart-Public/releases/download/v%{version}/AssetsLinuxOnly.zip
+Source1:        https://github.com/STJr/Kart-Public/releases/download/v%{version}/AssetsLinuxOnly.zip#/%{name}-assets.zip
 Source2:        srb2kart.desktop
 Source3:        srb2kart-opengl.desktop
 
