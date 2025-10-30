@@ -3,8 +3,8 @@
 Summary:        A kart racing mod based on the 3D Sonic the Hedgehog fangame Sonic Robo Blast 2, based on a modified version of Doom Legacy.
 Name:           srb2kart
 Version:        1.6
-Release:        1%{?dist}
-License:        GPLv2
+Release:        2%{?dist}
+License:        GPL-2.0-only
 URL:            https://mb.srb2.org/addons/srb2kart.2435/
 Source0:        https://github.com/STJr/Kart-Public/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/STJr/Kart-Public/releases/download/v%{version}/AssetsLinuxOnly.zip#/%{name}-assets.zip
@@ -46,6 +46,7 @@ unzip %{SOURCE1}
 
 %build
 %cmake \
+    -DCMAKE_C_STANDARD=99 \
     -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
 
 %cmake_build
@@ -64,6 +65,9 @@ install -m644  %{SOURCE3} %{buildroot}%{_datadir}/applications/srb2kart-opengl.d
 mkdir -p %{buildroot}%{asset_dir}/
 cp -pr assets/installer/* %{buildroot}%{asset_dir}/
 
+%check
+# Nothing to check
+
 %files
 %{_bindir}/srb2kart
 %{_datadir}/pixmaps/srb2kart.xpm
@@ -74,6 +78,9 @@ cp -pr assets/installer/* %{buildroot}%{asset_dir}/
 %{asset_dir}/
 
 %changelog
+* Thu Oct 30 2025 Jan200101 <sentrycraft123@gmail.com> - 1.6-2
+- rebuilt
+
 * Wed Apr 19 2023 Jan Drögehoff <sentrycraft123@gmail.com> - 1.6-1
 - Update to 1.6
 - Migrate to cmake
