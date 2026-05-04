@@ -46,6 +46,7 @@ unzip %{SOURCE1}
 
 %build
 %cmake \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DCMAKE_C_STANDARD=99 \
     -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
 
